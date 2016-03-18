@@ -8,6 +8,8 @@
 		_Amplifier ("Amplifier", Range(-10,10)) = 0.5
 		_RedMap ( "Red Map", 2D ) = "black" {}
 		_RedStrength ( "Red Strength", Range ( -20, 20 )) = 1
+		_GreenMap ( "Green Map", 2D ) = "black" {}
+		_GreenStrength ( "Green Strength", Range ( -20, 20 )) = 1
 		_BlueMap ( "Blue Map", 2D ) = "black" {}
 		_BlueStrength ( "Blue Strength", Range ( -20, 20 )) = 1
 	}
@@ -29,6 +31,8 @@
 		sampler2D _MainTex;
 		sampler2D _RedMap;
 		float _RedStrength;
+		sampler2D _GreenMap;
+		float _GreenStrength;
 		sampler2D _BlueMap;
 		float _BlueStrength;
 		
@@ -43,9 +47,11 @@
 			uv.y = 1 - uv.y;
 			
 			float4 redValue = tex2D (_RedMap, uv);
+			float4 greenValue = tex2D (_GreenMap, uv);
 			float4 blueValue = tex2D (_BlueMap, uv);
 			
 			v.vertex.z += sinValue * redValue.x * _RedStrength;
+			v.vertex.y += sinValue * greenValue.y * _GreenStrength;
 			v.vertex.x += sinValue * blueValue.z * _BlueStrength;
 		}
 		
@@ -53,8 +59,9 @@
 		void surf (Input IN, inout SurfaceOutput o)
 		{
 			o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
-			o.Albedo.r *= tex2D (_RedMap, IN.uv_MainTex).r;
-			o.Albedo.b *= tex2D (_BlueMap, IN.uv_MainTex).b;
+			//o.Albedo.r *= tex2D (_RedMap, IN.uv_MainTex).r;
+			//o.Albedo.g *= tex2D (_GreenMap, IN.uv_MainTex).g;
+			//o.Albedo.b *= tex2D (_BlueMap, IN.uv_MainTex).b;
 		}
 		ENDCG
 	} 
